@@ -11,39 +11,39 @@
 // [“1234”, “1567”, “-2”, “computer science”] → [“-2”]
 // [“Russia”, “Denmark”, “Kazan”] → []
 
-
-void printStringArray(string[] arr, bool skipEmpty = false)
-// Функция выводить массив. Если skipEmpty = true - то пустые значения не выводятся
+void printStringArray(string[] arr)
+// Функция выводит массив. Пустые значения не выводятся.
 {
-    bool[] commaArr = new bool[arr.Length];
-    if (skipEmpty)
-    {
-        for (int i = 0; i < arr.Length - 1; i++)
-        {
-            if (arr[i] != string.Empty) commaArr[i] = true;
-        }
-        int skipCommaIndex = arr.Length - 1;
-        for (int j = arr.Length - 1; j >= 0; j--)
-        {
-            if (arr[j] != string.Empty) skipCommaIndex = j;
-            j = -1;
-        }
-        commaArr[skipCommaIndex] = false;
-    }
     Console.Write("[");
-    for (int k = 0; k < arr.Length; k++)
+    int stopCommaIndex = -1;
+    for (int i = 0; i < arr.Length; i++)
     {
-        Console.Write(arr[k]);
-        if (skipEmpty && commaArr[k]) Console.Write(", ");
-        else if (!skipEmpty && k != arr.Length - 1) Console.Write(", ");
+        if (arr[i].Length > 0) stopCommaIndex = i;
     }
-
+    for (int i = 0; i < arr.Length; i++)
+    {
+        if (arr[i].Length == 0) continue;
+        else
+        {
+            for (int j = 0; j < arr[i].Length; j++)
+            {
+                Console.Write(arr[i][j]);
+            }
+            if (i < stopCommaIndex)
+            {
+                Console.Write(", ");
+            }
+        }
+    }
     Console.Write("]");
 }
 
 string[] CutStringsInArray(string[] arr, int maxLength)
+// Создает строковый массив со строками из исходного массива, длина которых
+// в случайном диапазоне от 0 до максимальной заданной
+// длина новой строки не может быть больше длины исходной строки
 {
-    if (maxLength  < 0) maxLength  = 0;
+    if (maxLength < 0) maxLength = 0;
     string[] newArr = new string[arr.Length];
     int stringLength = 0;
     Random rnd = new Random();
@@ -61,7 +61,6 @@ string[] CutStringsInArray(string[] arr, int maxLength)
         {
             stringLength = rnd.Next(0, arr[i].Length + 1);
         }
-
         newArr[i] = string.Empty;
         for (int k = 0; k < stringLength; k++)
         {
@@ -77,21 +76,4 @@ string[] newArray = CutStringsInArray(array, maxStringLength);
 
 printStringArray(array);
 Console.Write(" -> ");
-printStringArray(newArray, skipEmpty: true);
-
-
-string[] array1 = new string[5] { "A1", "A2", "", "A4", "" };
-string[] array2 = new string[5] { "A1", "A2", "", "", "A5" };
-string[] array3 = new string[5] { "A1", "", "", "", "A5" };
-string[] array4 = new string[5] { "A1", "", "", "", "" };
-string[] array5 = new string[5] { "", "", "A3", "", "" };
-Console.WriteLine();
-printStringArray(array1, skipEmpty: true);
-Console.WriteLine();
-printStringArray(array2, skipEmpty: true);
-Console.WriteLine();
-printStringArray(array3, skipEmpty: true);
-Console.WriteLine();
-printStringArray(array4, skipEmpty: true);
-Console.WriteLine();
-printStringArray(array5, skipEmpty: true);
+printStringArray(newArray);
